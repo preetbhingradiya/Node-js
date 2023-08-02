@@ -1,23 +1,40 @@
 // const { model } = require("mongoose");
 const user = require("../models/schema-model");
 const { default: check } = require("../middleware/check");
-const bcrypt=require('bcrypt')
+const bcrypt = require("bcrypt");
+const Jwt = require("jsonwebtoken");
 
 const home = async (req, res) => {
-  res.send(await user.find());
+  const  token  = req.cookies.token;
+  const decode = Jwt.verify(token, "sdfguikmnfchjwio"); //same keys is passed sdfguikmnfchjwio
+  req.data = await user.findById(decode._id);
+
+  res.render("home", { name: req.data.name });
+};
+
+const find = async (req, res) => {
+  res.render("index");
 };
 
 const login = async (req, res) => {
-  const {name,email,password}=req.body
+  const { name, email, password } = req.body;
 
-  const hashpass=await bcrypt.hash(password,10)
+  const hashpass = await bcrypt.hash(password, 10);
 
-  await user.create({
+  const data = await user.create({
     name,
     email,
-    password:hashpass,
+    password,
+    // password:hashpass,
   });
-  res.send(req.body);
+
+  const id = Jwt.sign({ _id: data._id }, "sdfguikmnfchjwio");
+
+  res.cookie("token", id, {
+    httpOnly: true,
+  });
+
+  res.redirect("/");
 };
 
 const remove = async (req, res) => {
@@ -30,4 +47,4 @@ const update = async (req, res) => {
   res.send("id is update");
 };
 
-module.exports = { home, login, remove, update };
+module.exports = { home, login, remove, update, find };
