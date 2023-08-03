@@ -47,4 +47,14 @@ const update = async (req, res) => {
   res.send("id is update");
 };
 
-module.exports = { home, login, remove, update, find };
+const sendImage=async(req,res)=>{
+  console.log(req.file);
+
+  await user.create({
+    path:req.file.path
+  })
+
+  res.send("Image Uplode Succsess")
+}
+
+module.exports = { home, login, remove, update, find ,sendImage};
