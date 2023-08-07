@@ -48,13 +48,24 @@ const update = async (req, res) => {
 };
 
 const sendImage=async(req,res)=>{
-  console.log(req.file);
 
-  await user.create({
-    path:req.file.path
+  let path=__dirname.split("\controllers",1) + req.file.path
+  await user.findByIdAndUpdate(req.params.id,{
+    path:path
   })
+  res.send("ok")
 
-  res.send("Image Uplode Succsess")
 }
 
-module.exports = { home, login, remove, update, find ,sendImage};
+const deleteImage=async(req,res)=>{
+  let path=req.f
+  await user.findByIdAndDelete(req.params.id,path)
+  res.status(200).json({
+    succsess:true,
+    user
+  })
+}
+
+
+
+module.exports = { home, login, remove, update, find ,sendImage,deleteImage};
