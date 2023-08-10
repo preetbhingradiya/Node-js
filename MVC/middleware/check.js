@@ -1,13 +1,11 @@
-const check=(req,res,next)=>{
+const check = (req, res, next) => {
+  let { name, email, password } = req.body;
 
-    let {name,email,password}=req.body
+  if (name && email && password) {
+    next();
+  } else {
+    res.send("Invalid detailes !");
+  }
+};
 
-    if(name&& email&& password){
-        next()
-    }
-    else{
-        res.send("Invalid detailes !")
-    }
-}
-
-module.exports=check
+module.exports = check;

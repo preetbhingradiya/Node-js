@@ -3,7 +3,8 @@ const connect = require("./confing/databse");
 const cors=require('cors')
 const server = require("./routes/routes");
 const path=require('path');
-const cookie=require("cookie-parser")
+const cookie=require("cookie-parser");
+const route = require("./routes/register");
 
 
 require("dotenv").config();
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 let port = process.env.port || 7070;
 
 app.use(server)
+app.use(route)
 
 app.listen(port,()=>{
     console.log("connect to data base");

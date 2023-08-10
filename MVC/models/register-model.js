@@ -4,9 +4,8 @@ const userschema=new mongoose.Schema({
     name:String,
     email:String,
     password:String,
-    path:[]
 })
 
-const user=mongoose.model("user",userschema)
+const customer=mongoose.model("customer",userschema)
 
-module.exports=user
+module.exports=customer
