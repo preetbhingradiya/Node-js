@@ -1,5 +1,8 @@
 const auth=(req,res,next)=>{
-    if(req.cookies.token=="prit"){
+
+    const {token}=req.cookies
+
+    if(token){
         next()
     }
     else{

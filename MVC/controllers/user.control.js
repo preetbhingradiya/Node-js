@@ -11,6 +11,10 @@ const home = async (req, res) => {
 
   // res.render("home", { name: req.data.name });
   res.render('home')
+  // const {token}=req.cookies
+  // console.log(token);
+  // if(token){
+  // }
 };
 
 const find = async (req, res) => {
