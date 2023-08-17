@@ -3,7 +3,6 @@ const {home, login, remove, update, find, sendImage, deleteImage,} = require('..
 const check = require('../middleware/check')
 const server=express()
 const multer=require("multer")
-const auth = require('../middleware/Authentic')
 
 
 const storage=multer.diskStorage({
@@ -19,7 +18,7 @@ const uplode=multer({
 })
 
 
-server.get('/',auth,home)
+server.get('/',home)
 server.get('/datashow',find)
 server.post('/login',check, login)
 server.delete('/delete/:id',remove)

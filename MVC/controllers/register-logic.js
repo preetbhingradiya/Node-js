@@ -4,18 +4,18 @@ const showTemplet=(req,res)=>{
     const {token}=req.cookies
 
     if(token){
-        res.render('home')
+        res.render("home")
     }
     else{
-        res.render('register')
+        res.render("register")
     }
 }
 
 const register=async(req,res)=>{    
 
-    const {email}=req.body
+    const {username}=req.body
 
-    const mach=await customer.findOne({email})
+    const mach=await customer.findOne({username})
 
     if(mach){
         res.send("User is Alredy Register")
@@ -34,17 +34,14 @@ const showLogin=(req,res)=>{
 }
 
 const login=async(req,res)=>{
-    const {email,password}=req.body
+    const {username,password}=req.body
 
-    const mach=await customer.findOne({email})
+    const mach=await customer.findOne({username})
 
     if(!mach) return res.redirect('/register/templet')
 
-        
+    if(mach.password!==password) return res.render('login',{username})
 
-    if(mach.password!==password)  return res.render('login',{email})
-
-    res.render('home')
 }
 
 module.exports={showTemplet,register,showLogin,login}

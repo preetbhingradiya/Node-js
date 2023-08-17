@@ -5,9 +5,11 @@ const server = require("./routes/routes");
 const path=require('path');
 const cookie=require("cookie-parser");
 const route = require("./routes/register");
-const passport =require('passport')
-const passport_session=require('express-session');
-const Auth = require("./middleware/loginAuth");
+const passport=require("passport");
+const session=require("express-session")
+const loginAuth = require("./middleware/loginAuth");
+
+loginAuth(passport)
 
 require("dotenv").config();
 const app = express();
@@ -18,8 +20,10 @@ app.use(cookie())
 app.use(express.static(path.join(path.resolve(),"public")))  //public folder uplode
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
-app.use(passport_session({secret:"secret"}))
-passport.use(Auth)
+
+app.use(session({secret:"secret",resave:false,saveUninitialized:false}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 let port = process.env.port || 7070;
 
