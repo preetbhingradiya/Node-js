@@ -8,8 +8,10 @@ const route = require("./routes/register");
 const passport=require("passport");
 const session=require("express-session")
 const loginAuth = require("./middleware/loginAuth");
+const googleAuth = require("./middleware/google.Auth");
 
 loginAuth(passport)
+googleAuth(passport)
 
 require("dotenv").config();
 const app = express();
