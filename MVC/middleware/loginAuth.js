@@ -19,7 +19,7 @@ const loginAuth = (passport) => {
   });
 
   passport.deserializeUser(async (id, done) => {
-    const value = await customer.findOne({ id });
+    const value = await customer.findById( id );
     done(null, value);
   });
 

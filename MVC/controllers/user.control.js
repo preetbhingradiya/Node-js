@@ -10,11 +10,13 @@ const home = async (req, res) => {
   // req.data = await user.findById(decode._id);
 
   // res.render("home", { name: req.data.name });
-  res.render('home')
   // const {token}=req.cookies
   // console.log(token);
   // if(token){
   // }
+  if(req.user) return  res.render('home')
+
+  res.render("login")
 };
 
 const find = async (req, res) => {
