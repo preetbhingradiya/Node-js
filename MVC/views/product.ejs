@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Product Page</h1>
+
+    <form>
+      <input type="text" id="title" />
+      <input type="url" id="url" />
+      <input type="number" id="price" />
+      <input type="submit" id="submit" />
+    </form>
+    <div id="productUi"></div>
+  </body>
+
+  <script>
+
+    fetch("/product/show")
+      .then((res) => res.json())
+      .then((res) => show(res));
+
+    let show=(data)=>{
+      data.map((ele)=>{
+        let title=document.createElement("h3")
+        title.innerHTML=ele.title
+        let img=document.createElement("img")
+        img.src=ele.img
+        let price=document.createElement("h4")
+        price.innerHTML=ele.price
+
+        let div=document.createElement("div")
+        div.append(img,title,price)
+
+        document.getElementById("productUi").append(div)
+      })
+    }
+
+    document.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      let product = {
+        title: document.getElementById("title").value,
+        url: document.getElementById("url").value,
+        price: document.getElementById("price").value,
+      };
+      return addProduct(product);
+    });
+
+    const addProduct = (data) => {
+      fetch("/product/add", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => response.json())
+        .then((res) => console.log(res));
+    };
+  </script>
+</html>
