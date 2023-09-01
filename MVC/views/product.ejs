@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
+  <style>
+    img{
+      width: 200px;
+      height: 200px;
+      margin-top: 20px;
+    }
+    #productUi{
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+    }
+  </style>
   <body>
     <h1>Product Page</h1>
 
@@ -19,21 +30,34 @@
 
   <script>
 
-    fetch("/product/show")
+    const getData=()=>{
+      fetch("/product/show")
       .then((res) => res.json())
       .then((res) => show(res));
+    }
+    getData()
 
     let show=(data)=>{
+      document.getElementById("productUi").innerHTML=""
       data.map((ele)=>{
         let title=document.createElement("h3")
         title.innerHTML=ele.title
         let img=document.createElement("img")
-        img.src=ele.img
+        img.src=ele.url
         let price=document.createElement("h4")
         price.innerHTML=ele.price
-
+        let btn=document.createElement("button")
+        btn.innerHTML="Delete"
         let div=document.createElement("div")
-        div.append(img,title,price)
+        div.append(img,title,price,btn)
+
+        btn.addEventListener("click",()=>{
+          console.log(ele._id);
+          fetch(`/product/remove/${ele._id}`,{
+            method:"DELETE" 
+          })
+          .then(()=>getData())
+        })
 
         document.getElementById("productUi").append(div)
       })
@@ -58,7 +82,7 @@
         },
       })
         .then((response) => response.json())
-        .then((res) => console.log(res));
+        .then((res) => getData(res));
     };
   </script>
 </html>
