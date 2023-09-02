@@ -6,14 +6,14 @@
     <title>Document</title>
   </head>
   <style>
-    img{
+    img {
       width: 200px;
       height: 200px;
       margin-top: 20px;
     }
-    #productUi{
+    #productUi {
       display: grid;
-      grid-template-columns: repeat(4,1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
   </style>
   <body>
@@ -23,45 +23,54 @@
       <input type="text" id="title" />
       <input type="url" id="url" />
       <input type="number" id="price" />
-      <input type="submit" id="submit" />
+      <input type="submit" id="submit" value="POST" />
     </form>
     <div id="productUi"></div>
   </body>
 
   <script>
-
-    const getData=()=>{
+    const getData = () => {
       fetch("/product/show")
-      .then((res) => res.json())
-      .then((res) => show(res));
-    }
-    getData()
+        .then((res) => res.json())
+        .then((res) => show(res));
+    };
+    getData();
 
-    let show=(data)=>{
-      document.getElementById("productUi").innerHTML=""
-      data.map((ele)=>{
-        let title=document.createElement("h3")
-        title.innerHTML=ele.title
-        let img=document.createElement("img")
-        img.src=ele.url
-        let price=document.createElement("h4")
-        price.innerHTML=ele.price
-        let btn=document.createElement("button")
-        btn.innerHTML="Delete"
-        let div=document.createElement("div")
-        div.append(img,title,price,btn)
+    let id = "";
 
-        btn.addEventListener("click",()=>{
-          console.log(ele._id);
-          fetch(`/product/remove/${ele._id}`,{
-            method:"DELETE" 
-          })
-          .then(()=>getData())
-        })
+    let show = (data) => {
+      document.getElementById("productUi").innerHTML = "";
+      data.map((ele,index) => {
+        let title = document.createElement("h3");
+        title.innerHTML = ele.title;
+        let img = document.createElement("img");
+        img.src = ele.url;
+        let price = document.createElement("h4");
+        price.innerHTML = ele.price;
+        let btn = document.createElement("button");
+        btn.innerHTML = "Delete";
+        let update = document.createElement("button");
+        update.innerHTML = "Update";
+        let div = document.createElement("div");
+        div.append(img, title, price, btn, update);
 
-        document.getElementById("productUi").append(div)
-      })
-    }
+        btn.addEventListener("click", () => {
+          fetch(`/product/remove/${ele._id}`, {
+            method: "DELETE",
+          }).then(() => getData());
+        });
+
+        update.addEventListener("click", () => {
+          (document.getElementById("submit").value = "Upadate"),
+          (document.getElementById("title").value = ele.title),
+          (document.getElementById("url").value = ele.url),
+          (document.getElementById("price").value = ele.price);
+          id = ele._id;
+        });
+
+        document.getElementById("productUi").append(div);
+      });
+    };
 
     document.querySelector("form").addEventListener("submit", (e) => {
       e.preventDefault();
@@ -70,12 +79,29 @@
         url: document.getElementById("url").value,
         price: document.getElementById("price").value,
       };
-      return addProduct(product);
+      let type = document.getElementById("submit").value;
+      if (type == "POST") {
+        addproduct(product);
+      } else {
+        updateProduct(data,id)
+      }
     });
 
     const addProduct = (data) => {
       fetch("/product/add", {
         method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => response.json())
+        .then((res) => getData(res));
+    };
+
+    const updateProduct = (data, id) => {
+      fetch(`/product/update/${id}`, {
+        method: "PATCH",
         body: JSON.stringify(data),
         headers: {
           "Content-type": "application/json; charset=UTF-8",

@@ -18,5 +18,9 @@ productRoute.delete("/remove/:id",async(req,res)=>{
     await product.findByIdAndDelete(req.params.id)
     res.json({success:true})
 })
+productRoute.patch("/update/:id",async(req,res)=>{
+    await product.findByIdAndUpdate(req.params.id,req.body)
+    res.json({success:true})
+})
 
 module.exports=productRoute
