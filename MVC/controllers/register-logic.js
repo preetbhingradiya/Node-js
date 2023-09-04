@@ -44,4 +44,23 @@ const login=async(req,res)=>{
 
 }
 
-module.exports={showTemplet,register,showLogin,login}
+const password=(req,res)=>{
+    res.render("password")
+}
+
+const changePassword=async(req,res)=>{
+
+    let user=await customer.findById(req.user.id)
+    
+    if(user.password!==req.body.oldPassword) return res.json({message:"inccorect password"})
+
+    if(req.body.newPassword !== req.body.confirmPassword) return res.json({message:"password is does not match"})
+
+    user.password=req.body.newPassword
+
+    await user.save()
+
+    res.json({success:true})
+}
+
+module.exports={showTemplet,register,showLogin,login,password,changePassword}

@@ -1,6 +1,7 @@
 const express=require('express')
-const { showTemplet, register, showLogin} = require('../controllers/register-logic')
+const { showTemplet, register, showLogin, password, changePassword} = require('../controllers/register-logic')
 const passport = require('passport')
+const isAutherize = require('../middleware/Autherize')
 
 const route=express()
 
@@ -19,5 +20,8 @@ route.get('/auth/google/callback',
     res.redirect('/');
 });
 
+//change password
+route.get('/password',isAutherize,password)
+route.patch("/changpassword",changePassword)
 
 module.exports=route

@@ -23,4 +23,5 @@ productRoute.patch("/update/:id",async(req,res)=>{
     res.json({success:true})
 })
 
+
 module.exports=productRoute
