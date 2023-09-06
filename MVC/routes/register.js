@@ -1,5 +1,5 @@
 const express=require('express')
-const { showTemplet, register, showLogin, password, changePassword} = require('../controllers/register-logic')
+const { showTemplet, register, showLogin, password, changePassword, sendEmail, verifyOtp} = require('../controllers/register-logic')
 const passport = require('passport')
 const isAutherize = require('../middleware/Autherize')
 
@@ -23,5 +23,9 @@ route.get('/auth/google/callback',
 //change password
 route.get('/password',isAutherize,password)
 route.patch("/changpassword",changePassword)
+
+//Email 
+route.get('/email',sendEmail)
+route.get("/verify/:otp",verifyOtp)
 
 module.exports=route

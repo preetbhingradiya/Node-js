@@ -1,3 +1,4 @@
+const trasport = require("../confing/maile")
 const customer = require("../models/register-model")
 
 const showTemplet=(req,res)=>{
@@ -60,7 +61,34 @@ const changePassword=async(req,res)=>{
 
     await user.save()
 
-    res.json({success:true})
+    res.status(200).json({
+        success:true,
+        user
+    })
 }
 
-module.exports={showTemplet,register,showLogin,login,password,changePassword}
+const OTP=Math.floor(Math.random()*1000000)
+
+const sendEmail=async(req,res)=>{
+    const mailOptons={
+        from:process.env.EMAIL,
+        to:"preetbhingradiya6@gmail.com",
+        subject:"verify Account ??",
+        html:`<a href="localhost:/7070/email/verify/${OTP}">${OTP}</a>`
+    }
+
+    trasport.sendMail(mailOptons,(err,Info)=>{
+        if(err) return console.log(err);
+
+        res.send(Info)
+    })
+}
+
+const verifyOtp=async(req,res)=>{
+    if(req.params.otp !== OTP.toString()) return res.json({success:false,message:"OTP dones not match"})
+
+    res.json({success:true,message:"Account is verify"})
+}
+
+
+module.exports={showTemplet,register,showLogin,login,password,changePassword,sendEmail,verifyOtp}
