@@ -10,6 +10,7 @@ const session=require("express-session")
 const loginAuth = require("./middleware/loginAuth");
 const googleAuth = require("./middleware/google.Auth");
 const productRoute = require("./routes/product");
+const blogRoute = require("./routes/blog-route");
 
 loginAuth(passport)
 googleAuth(passport)
@@ -33,6 +34,7 @@ let port = process.env.port || 7070;
 app.use(server)
 app.use(route)
 app.use('/product',productRoute)
+app.use('/blog',blogRoute)
 
 app.listen(port,()=>{
     console.log(`connect to data base ${port}`);
