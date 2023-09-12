@@ -6,11 +6,11 @@ const homeBlog=(req,res)=>{
 
 const newBlog=async(req,res)=>{
     req.body.userId=req.user.id
-    let blogs=await blog.create(req.body)
+    let blogs=await (await blog.create(req.body)).populate("userId")
     res.status(200).json({
         success:true,
         blogs
     })
 }
-``
+
 module.exports={homeBlog,newBlog}
